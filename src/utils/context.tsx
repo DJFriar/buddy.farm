@@ -16,6 +16,7 @@ interface ContextProps {
   setSearchables: React.Dispatch<React.SetStateAction<Searchable[] | null>>
   query: string | null
   setQuery: React.Dispatch<React.SetStateAction<string | null>>
+  passwords: Settings
   settings: Settings
   setSettings: SetSettings
   setSetting: SetSetting
@@ -29,6 +30,7 @@ export const GlobalContext = React.createContext<ContextProps>({
   setSearchables: () => null,
   query: null,
   setQuery: () => null,
+  passwords: {},
   settings: {},
   setSettings: () => null,
   setSetting: () => null,
@@ -45,6 +47,7 @@ const Provider = ({ children }: ProviderProps) => {
   const [searchables, setSearchables] = useState<Searchable[] | null>(null)
   const [query, setQuery] = useState<string | null>(null)
   const [settings, setSettings, setSetting] = useSettings()
+  const [passwords] = useSettings("buddyFarmPasswords")
   const [toasts, addToast, removeToast] = useToasts()
 
   useEffect(() => {
@@ -52,13 +55,14 @@ const Provider = ({ children }: ProviderProps) => {
       if (new URLSearchParams(document.location.search).get("dark") === null) {
         document.documentElement.classList[settings.darkMode ? "add" : "remove"]("dark")
       }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       typeof window !== "undefined" && window.gtag && window.gtag("set", "user_properties", { dark_mode: settings.darkMode ? "true" : "false" })
     }
   }, [settings.darkMode])
 
   return (
-    <GlobalContext.Provider value={{ searchables, setSearchables, query, setQuery, settings, setSettings, setSetting, toasts, addToast, removeToast }}>
+    <GlobalContext.Provider value={{ searchables, setSearchables, query, setQuery, settings, setSettings, setSetting, passwords, toasts, addToast, removeToast }}>
       {children}
     </GlobalContext.Provider>
   )

@@ -87,6 +87,38 @@ Input.Text = ({ id, placeholder, after, value, defaultValue, disabled, pattern, 
   </Input>
 )
 
+export interface ObjectInputProps extends Omit<InputProps, "children"> {
+  placeholder?: string
+  value?: string
+  defaultValue?: string
+  disabled?: boolean
+  objectType?: string
+  pattern?: string
+  type?: InputTypes
+  onChange?: (value: string) => void
+}
+
+Input.Textbox = ({ id, placeholder, value, defaultValue, disabled, type, onChange, ...props }: TextInputProps) => (
+  <Input id={id} {...props}>
+    <InputGroup>
+      <Form.Control
+        name={id}
+        as="textarea"
+        placeholder={placeholder}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={evt => onChange && onChange(evt.target.value)}
+        disabled={disabled}
+        data-input-type={type}
+      />
+    </InputGroup>
+  </Input>
+)
+
+function updateSettingsObject(settingsObject: any) {
+  console.log(settingsObject);
+}
+
 export interface SelectInputProps extends InputProps {
   defaultValue: string
   type?: InputTypes

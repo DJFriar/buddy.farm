@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
-import { Input, SwitchInputProps, TextInputProps, SelectInputProps } from '../components/input'
+import { Input, SelectInputProps, SwitchInputProps, ObjectInputProps, TextInputProps  } from '../components/input'
 import Layout from '../components/layout'
 import { Settings } from '../hooks/settings'
 import { GlobalContext } from '../utils/context'
@@ -21,6 +21,14 @@ const TextSetting = ({ settings, ...props }: TextSettingProps) => (
   <Input.Text defaultValue={settings[props.id]} {...props} />
 )
 
+interface ObjectSettingProps extends Omit<ObjectInputProps, "defaultValue"> {
+  settings: Settings
+}
+
+const ObjectSetting = ({ settings, ...props }: ObjectSettingProps) => (
+  <Input.Textbox defaultValue={JSON.stringify(settings)} {...props} />
+)
+
 interface SelectSettingProps extends Omit<SelectInputProps, "defaultValue"> {
   id: string
   label: string
@@ -35,6 +43,7 @@ const SelectSetting = ({ settings, ...props }: SelectSettingProps) => (
 export default () => {
   const ctx = useContext(GlobalContext)
   const settings = ctx.settings
+  const passwords = ctx.passwords
   const [secretKnock, setSecretKnock] = useState(0)
 
   const secretKnockEnabled = secretKnock >= 3
@@ -85,6 +94,11 @@ export default () => {
         <TextSetting id="primerExploring" label="Bonus Exploring XP" placeholder='0' type="number" after="%" settings={settings} />
         <TextSetting id="resourceSaver" label="Resource Saver" placeholder='20' type="number" after="%" settings={settings} />
         <SwitchSetting id="runecube" label="Eagle Eye (Runecube)" settings={settings} />
+      </fieldset>
+      <fieldset>
+        <legend>Settings Objects</legend>
+        <ObjectSetting id="settingsObject" label="Settings" objectType="settings" settings={settings} />
+        <ObjectSetting id="passwordsObject" label="Passwords" objectType="passwords" settings={passwords} />
       </fieldset>
     </Input.Form>
   </Layout>
