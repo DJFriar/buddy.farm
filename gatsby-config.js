@@ -1,6 +1,7 @@
 // @ts-check
 
-const DATA_ROOT = process.env.FARMRPG_DATA_ROOT
+// const DATA_ROOT = process.env.FARMRPG_DATA_ROOT
+const DATA_ROOT = "../FarmRPG-ext/data"
 if (!DATA_ROOT) {
   throw "Set $FARMRPG_DATA_ROOT"
 }
